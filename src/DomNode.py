@@ -1,27 +1,26 @@
-from src.Settings import LangData
 from Namespace import Namespace
 
 class DomNode(Namespace):
   def __init__(self, tag=None, scopeless=True):
     self.tag = tag
-    self.parameters = {}
+    self.parameters = Namespace()
     self.children = []
     self.scopeless = scopeless
     self.isText = False
+    self.isFunction = False
     self.parent = None # set when added to DOM
     self.depth = 0 # set when added to DOM
-
-  def setTag(self, tag):
-    if tag[0] == LangData.TagNameScopeless:
-      self.scopeless = True
-      tag = tag[1:]
-    self.tag = tag
 
   def addParameter(self, key, value):
     self.parameters[key] = value
 
   def appendChild(self, child):
     self.children.append(child)
+    child.parent = self
+    child.depth = self.depth +1
+
+  def insertChild(self, child, index):
+    self.children.insert(index, child)
     child.parent = self
     child.depth = self.depth +1
 
@@ -32,6 +31,22 @@ class DomNode(Namespace):
       self.children[-1].text += ' ' + text
     else:
       self.appendChild(DomNodeText(text))
+
+  def duplicate(self, newParent=None):
+    other = DomNode(self.tag, self.scopeless)
+    other.isText = self.isText
+    other.isFunction = self.isFunction
+    other.parameters = Namespace(**{k:v for k,v in self.parameters.items()})
+    for child in self.children:
+      child.duplicate(other)
+    if newParent is not None:
+      newParent.appendChild(other)
+    return other
+
+  def recalcSubtreeDepths(self):
+    for child in self.children:
+      child.depth = self.depth +1
+      child.recalcSubtreeDepths()
 
   def __str__(self):
     indent = self.depth * '  '
@@ -51,3 +66,8 @@ class DomNodeText(DomNode):
     self.text = text
     self.isText = True
     self.scopeless = True
+
+  def duplicate(self, newParent):
+    other = super().duplicate(newParent)
+    other.text = self.text
+    return other

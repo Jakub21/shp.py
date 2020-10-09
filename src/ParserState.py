@@ -1,5 +1,6 @@
 from src.Settings import LangData
 from src.DomNode import DomNode
+from src.FunctionNode import FunctionNode
 
 class ParserState:
   def __init__(self, parser):
@@ -13,6 +14,11 @@ class ParserStateDefault(ParserState):
       node = DomNode(token.text[1:], token.isTagNameScopeless())
       self.parser.currentScope.appendChild(node)
       self.parser.lastTag = node
+    elif token.isFunctionName():
+      func = FunctionNode(token.text[1:])
+      func.setParent(self.parser.currentScope)
+      self.parser.funcCalls.append(func)
+      self.parser.lastTag = func
     elif token.isScope():
       self.parser.state = ParserStateScope(self.parser)
       self.parser.state.parseToken(token)

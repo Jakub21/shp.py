@@ -37,3 +37,10 @@ class Token:
     return self.text == LangData.ScopeOpen
   def isScopeClose(self):
     return self.text == LangData.ScopeClose
+
+  def isFunctionName(self):
+    return self.text.startswith(LangData.FunctionName)
+  def isFunctionContent(self):
+    return self.text == LangData.FunctionContent
+  def isFunctionClose(self):
+    return self.text == LangData.FunctionClose
