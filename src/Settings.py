@@ -13,12 +13,6 @@ class LangData:
   Literal = '\''
   Comment = '//'
 
-  TokenSeparators = [
-    TagOpen, TagClose,
-    ScopeOpen, ScopeClose,
-    Literal
-  ]
-
 
 class LangFunctions:
   @staticmethod
