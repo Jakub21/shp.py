@@ -8,18 +8,18 @@ class ParserState:
 
 class ParserStateDefault(ParserState):
   def parseToken(self, token):
-    if token.isTagOpen():
+    if token.type == 'TagOpen':
       self.parser.state = ParserStateTag(self.parser)
-    elif token.isTagName():
-      node = DomNode(token.text[1:], token.isTagNameScopeless())
+    elif token.type == 'TagNameScoped' or token.type == 'TagNameScopeless':
+      node = DomNode(token.text[1:], token.type == 'TagNameScopeless')
       self.parser.currentScope.appendChild(node)
       self.parser.lastTag = node
-    elif token.isFunctionName():
+    elif token.type == 'FunctionName':
       func = FunctionNode(token.text[1:])
       func.setParent(self.parser.currentScope)
       self.parser.funcCalls.append(func)
       self.parser.lastTag = func
-    elif token.isScope():
+    elif token.type == 'ScopeOpen' or token.type == 'ScopeClose':
       self.parser.state = ParserStateScope(self.parser)
       self.parser.state.parseToken(token)
     else:
@@ -32,14 +32,14 @@ class ParserStateTag(ParserState):
     self.index = 0
     self.lastParamKey = ''
   def parseToken(self, token):
-    if token.isTagClose():
+    if token.type == 'TagClose':
       self.parser.state = ParserStateDefault(self.parser)
-    elif token.isTagId():
+    elif token.type == 'TagId':
       self.node.parameters['id'] = token.text[1:]
-    elif token.isTagClass():
+    elif token.type == 'TagClass':
       try: self.node.parameters['class'] += ' '+token.text[1:]
       except KeyError: self.node.parameters['class'] = token.text[1:]
-    elif token.isTagFlagParam():
+    elif token.type == 'TagFlagParam':
       self.node.parameters[token.text[1:]] = 'true'
     else:
       self.index += 1
@@ -48,8 +48,8 @@ class ParserStateTag(ParserState):
 
 class ParserStateScope(ParserState):
   def parseToken(self, token):
-    if token.isScopeOpen():
+    if token.type == 'ScopeOpen':
       self.parser.currentScope = self.parser.lastTag
-    elif token.isScopeClose():
+    elif token.type == 'ScopeClose':
       self.parser.currentScope = self.parser.currentScope.parent
     self.parser.state = ParserStateDefault(self.parser)

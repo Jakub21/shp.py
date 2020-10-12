@@ -18,7 +18,7 @@ class Builder:
 
     result = f'{indent}<{node.tag}'
     for key, val in node.parameters.items():
-      result += f' {key}=\'{val}\''
+      result += f' {key}={val}'
     if node.scopeless:
       result += '/>\n'
       return result

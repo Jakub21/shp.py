@@ -1,7 +1,7 @@
 from Namespace import Namespace
 
 class DomNode(Namespace):
-  def __init__(self, tag=None, scopeless=True):
+  def __init__(self, tag=None, scopeless=False):
     self.tag = tag
     self.parameters = Namespace()
     self.children = []

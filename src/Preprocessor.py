@@ -19,13 +19,15 @@ class Preprocessor:
     print(f'Compiling {self.path}')
     with open(self.path, 'r') as file:
       raw = file.read()
-    self.parser.parse(self.lexer.tokenize(raw))
+    self.lexer.tokenize(raw)
+    self.parser.parse(self.lexer.tokens)
     html = self.builder.build(self.parser.dom)
     if minify: html = self.builder.minify(html)
     with open(self.target, 'w', newline='\n') as file:
       file.write(html)
 
   def watch(self, minify):
+    print(f'Watching {self.path}')
     path = self.getSanitizedPath()
     eventHandler = EventHandler(path.fn, self.compile, [minify])
     observer = Observer()
