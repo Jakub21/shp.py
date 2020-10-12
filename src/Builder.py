@@ -19,10 +19,9 @@ class Builder:
     result = f'{indent}<{node.tag}'
     for key, val in node.parameters.items():
       result += f' {key}={val}'
-    if node.scopeless:
-      result += '/>\n'
-      return result
     result += '>'
+    if node.scopeless:
+      return result + '\n'
     if closeInNewLine: result += '\n'
     for child in node.children:
       result += self.buildNode(child, isSingleTextNode)
