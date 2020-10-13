@@ -18,7 +18,8 @@ class Builder:
 
     result = f'{indent}<{node.tag}'
     for key, val in node.parameters.items():
-      result += f' {key}={val}'
+      if val.startswith("'"): result += f' {key}={val}'
+      else: result += f" {key}='{val}'"
     result += '>'
     if node.scopeless:
       return result + '\n'
