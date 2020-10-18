@@ -16,6 +16,8 @@ class Builder:
     except IndexError: isSingleTextNode = False
     closeInNewLine = not isSingleTextNode and len(node.children)
 
+    if node.isDoctype:
+      return f'{indent}<!DOCTYPE HTML>\n'
     result = f'{indent}<{node.tag}'
     for key, val in node.parameters.items():
       if val.startswith("'"): result += f' {key}={val}'

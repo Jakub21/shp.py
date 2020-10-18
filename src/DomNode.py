@@ -7,6 +7,7 @@ class DomNode(Namespace):
     self.children = []
     self.scopeless = scopeless
     self.isText = False
+    self.isDoctype = False
     self.isFunction = False
     self.parent = None # set when added to DOM
     self.depth = 0 # set when added to DOM
@@ -71,3 +72,10 @@ class DomNodeText(DomNode):
     other = super().duplicate(newParent)
     other.text = self.text
     return other
+
+
+class DoctypeNode(DomNode):
+  def __init__(self):
+    super().__init__('__doctype__')
+    self.isDoctype = True
+    self.scopeless = True

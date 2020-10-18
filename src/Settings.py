@@ -1,3 +1,4 @@
+from src.DomNode import DoctypeNode
 
 class LangData:
   TagOpen = '['
@@ -28,3 +29,7 @@ class LangFunctions:
       child = oldChild.duplicate()
       scope.insertChild(child, func.isNthChild)
       scope.recalcSubtreeDepths()
+
+  @staticmethod
+  def doctype(func, parser, scope):
+    scope.insertChild(DoctypeNode(), func.isNthChild)
