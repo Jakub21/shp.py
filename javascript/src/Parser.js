@@ -1,18 +1,18 @@
 
 class Parser {
-  constructor(root) {
-    this.reset(root);
+  constructor() {
+    this.reset();
   }
 
   reset(root) {
     this.state = new ParserStateDefault(this);
-    this.root = root;
+    this.root = new ShpNode();
     this.currentScope = this.root;
     this.lastNode = this.root;
   }
 
   parse(tokens) {
-    this.reset(this.root);
+    this.reset();
     for (let token of tokens) {
       this.state.parseToken(token);
     }

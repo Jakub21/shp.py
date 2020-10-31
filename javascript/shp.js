@@ -1,4 +1,33 @@
 
+class Builder {
+  build(node) {
+    let result = '';
+    for (let child of node.children) {
+      result += this.buildNode(child);
+    }
+    return result;
+  }
+  buildNode(node) {
+    if (node.isText) {
+      return node.text;
+    }
+    let result = `<${node.tag}`;
+    for (let [key, val] of Object.entries(node.parameters)) {
+      if (val.startsWith("'")) result += ` ${key}=${val}`;
+      else result += ` ${key}='${val}'`;
+    }
+    result += '>';
+    if (node.scopeless) {
+      return `${result}\n`
+    }
+    for (let child of node.children) {
+      result += this.buildNode(child)
+    }
+    result += `</${node.tag}>\n`
+    return result;
+  }
+}
+
 class Lexer {
   constructor() {
     this.reset();
@@ -96,19 +125,19 @@ class LexerStateComment extends LexerState {
 }
 
 class Parser {
-  constructor(root) {
-    this.reset(root);
+  constructor() {
+    this.reset();
   }
 
   reset(root) {
     this.state = new ParserStateDefault(this);
-    this.root = root;
+    this.root = new ShpNode();
     this.currentScope = this.root;
     this.lastNode = this.root;
   }
 
   parse(tokens) {
-    this.reset(this.root);
+    this.reset();
     for (let token of tokens) {
       this.state.parseToken(token);
     }
@@ -126,14 +155,14 @@ class ParserStateDefault extends ParserState {
     if (token.type == 'TagOpen') {
       this.parser.state = new ParserStateTag(this.parser);
     } else if (['TagNameScoped', 'TagNameScopeless'].includes(token.type)) {
-      let node = $create(token.text.substr(1));
+      let node = new ShpNode(token.text.substr(1));
       this.parser.currentScope.appendChild(node);
       this.parser.lastNode = node;
     } else if (['ScopeOpen', 'ScopeClose'].includes(token.type)) {
       this.parser.state = new ParserStateScope(this.parser);
       this.parser.state.parseToken(token);
     } else {
-      this.parser.currentScope.appendChild($text(token.text + ' '));
+      this.parser.currentScope.appendChild(new ShpNodeText(token.text + ' '));
     }
   }
 }
@@ -149,15 +178,15 @@ class ParserStateTag extends ParserState {
     if (token.type == 'TagClose') {
       this.parser.state = new ParserStateDefault(this.parser);
     } else if (token.type == 'TagId') {
-      this.node.id = token.text.substr(1);
+      this.node.addParameter('id', token.text.substr(1));
     } else if (token.type == 'TagClass') {
-      this.node.classList.add(token.text.substr(1));
+      this.node.addParameter('class', token.text.substr(1));
     } else if (token.type == 'TagFlagParam') {
-      this.node[token.text.substr(1)] = true;
+      this.node.addParameter(token.text.substr(1), true);
     } else {
       this.index += 1;
       if (this.index % 2) this.lastParamKey = token.text;
-      else this.node[this.lastParamKey] = token.text;
+      else this.node.addParameter(this.lastParamKey, token.text);
     }
   }
 }
@@ -167,7 +196,7 @@ class ParserStateScope extends ParserState {
     if (token.type == 'ScopeOpen') {
       this.parser.currentScope = this.parser.lastNode;
     } else if (token.type == 'ScopeClose') {
-      this.parser.currentScope = this.parser.currentScope.parentNode;
+      this.parser.currentScope = this.parser.currentScope.parent;
     }
     this.parser.state = new ParserStateDefault(this.parser);
   }
@@ -192,11 +221,48 @@ class ShpCompiler {
   constructor(root) {
     this.lexer = new Lexer();
     this.parser = new Parser(root);
+    this.builder = new Builder();
   }
   compile(shp) {
     this.lexer.tokenize(shp);
     this.parser.parse(this.lexer.tokens);
-    return this.parser.root;
+    let temp = $create('div');
+    temp.innerHTML = this.builder.build(this.parser.root);
+    return temp.children;
+  }
+}
+
+class ShpNode {
+  constructor(tag, scopeless=false) {
+    this.tag = tag;
+    this.parameters = {};
+    this.children = [];
+    this.scopeless = scopeless;
+    this.isText = false;
+    this.parent = undefined;
+  }
+  addParameter(key, value) {
+    this.parameters[key] = value;
+  }
+  appendChild(child) {
+    this.children.push(child);
+    child.parent = this;
+  }
+  appendText(text) {
+    let lastNode = this.children[this.children.length-1];
+    if (lastNode.tag == '__text__') {
+      lastNode.text += ' ' + text;
+    } else {
+      this.appendChild(new ShpNodeText(text));
+    }
+  }
+}
+
+class ShpNodeText extends ShpNode {
+  constructor(text) {
+    super('__text__', true);
+    this.text = text;
+    this.isText = true;
   }
 }
 

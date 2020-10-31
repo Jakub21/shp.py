@@ -10,14 +10,14 @@ class ParserStateDefault extends ParserState {
     if (token.type == 'TagOpen') {
       this.parser.state = new ParserStateTag(this.parser);
     } else if (['TagNameScoped', 'TagNameScopeless'].includes(token.type)) {
-      let node = $create(token.text.substr(1));
+      let node = new ShpNode(token.text.substr(1));
       this.parser.currentScope.appendChild(node);
       this.parser.lastNode = node;
     } else if (['ScopeOpen', 'ScopeClose'].includes(token.type)) {
       this.parser.state = new ParserStateScope(this.parser);
       this.parser.state.parseToken(token);
     } else {
-      this.parser.currentScope.appendChild($text(token.text + ' '));
+      this.parser.currentScope.appendChild(new ShpNodeText(token.text + ' '));
     }
   }
 }
@@ -33,15 +33,15 @@ class ParserStateTag extends ParserState {
     if (token.type == 'TagClose') {
       this.parser.state = new ParserStateDefault(this.parser);
     } else if (token.type == 'TagId') {
-      this.node.id = token.text.substr(1);
+      this.node.addParameter('id', token.text.substr(1));
     } else if (token.type == 'TagClass') {
-      this.node.classList.add(token.text.substr(1));
+      this.node.addParameter('class', token.text.substr(1));
     } else if (token.type == 'TagFlagParam') {
-      this.node[token.text.substr(1)] = true;
+      this.node.addParameter(token.text.substr(1), true);
     } else {
       this.index += 1;
       if (this.index % 2) this.lastParamKey = token.text;
-      else this.node[this.lastParamKey] = token.text;
+      else this.node.addParameter(this.lastParamKey, token.text);
     }
   }
 }
@@ -51,7 +51,7 @@ class ParserStateScope extends ParserState {
     if (token.type == 'ScopeOpen') {
       this.parser.currentScope = this.parser.lastNode;
     } else if (token.type == 'ScopeClose') {
-      this.parser.currentScope = this.parser.currentScope.parentNode;
+      this.parser.currentScope = this.parser.currentScope.parent;
     }
     this.parser.state = new ParserStateDefault(this.parser);
   }
