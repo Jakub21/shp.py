@@ -10,6 +10,6 @@ class ShpCompiler {
     this.parser.parse(this.lexer.tokens);
     let temp = $create('div');
     temp.innerHTML = this.builder.build(this.parser.root);
-    return temp.children;
+    return Array.from(temp.children);
   }
 }
