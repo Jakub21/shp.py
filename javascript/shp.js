@@ -242,7 +242,11 @@ class ShpNode {
     this.parent = undefined;
   }
   addParameter(key, value) {
-    this.parameters[key] = value;
+    if (this.parameters[key] == undefined) {
+      this.parameters[key] = value;
+    } else {
+      this.parameters[key] += ' ' + value;
+    }
   }
   appendChild(child) {
     this.children.push(child);
