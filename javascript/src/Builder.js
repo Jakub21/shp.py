@@ -18,12 +18,12 @@ class Builder {
     }
     result += '>';
     if (node.scopeless) {
-      return `${result}\n`
+      return `${result}\n`;
     }
     for (let child of node.children) {
-      result += this.buildNode(child)
+      result += this.buildNode(child);
     }
-    result += `</${node.tag}>\n`
+    result += `</${node.tag}>\n`;
     return result;
   }
 }
