@@ -37,7 +37,7 @@ class ParserStateTag extends ParserState {
     } else if (token.type == 'TagClass') {
       this.node.addParameter('class', token.text.substr(1));
     } else if (token.type == 'TagFlagParam') {
-      this.node.addParameter(token.text.substr(1), true);
+      this.node.addParameter(token.text.substr(1), 'true');
     } else {
       this.index += 1;
       if (this.index % 2) this.lastParamKey = token.text;
