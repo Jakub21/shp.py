@@ -7,7 +7,7 @@ from time import sleep
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
-class Preprocessor:
+class Compiler:
   def __init__(self, path, target):
     self.path = path
     self.target = target

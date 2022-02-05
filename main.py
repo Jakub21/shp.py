@@ -1,12 +1,12 @@
 from argparse import ArgumentParser
-from src.Preprocessor import Preprocessor
+from src.Compiler import Compiler
 
 def main(args):
-  pp = Preprocessor(args.path, args.target)
+  compiler = Compiler(args.path, args.target)
   if args.watch:
-    pp.watch(args.minify)
+    compiler.watch(args.minify)
   else:
-    pp.compile(args.minify)
+    compiler.compile(args.minify)
 
 if __name__ == '__main__':
   ap = ArgumentParser()
