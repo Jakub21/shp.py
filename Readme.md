@@ -1,12 +1,22 @@
+# SHP.py
 
-# Static Html Pre-processor
+Static HTML Preprocessor
 
 Compiles HTML from files with easy to read SHP syntax.
 
-#### User defined language
-To enable SHP syntax coloring in Notepad++ import `npp_udl_shp.xml` in `Language > User Defined Language > Define your language... > Import`. Then choose `shp` from the languages list.
+You might also want to lake a look at the [Javascript port](https://github.com/Jakub21/shp.js) of this project.
+
+#### Notepad++ SHP syntax coloring
+You can enable syntax coloring for SHP in the following way
+
+- In the top bar, open `Language` tab
+- Navigate to `User Defined Language`, then `Define your language...`
+- Choose `Import` and select `./npp_udl_shp.xml` from this repository
+- Go back to `Language` tab and select `shp` from the list.
 
 # SHP Syntax
+
+General example
 
 ```shp
 @doctype[#HTML]
@@ -76,7 +86,6 @@ $div[#SecondElement .Wide] {
 #### Summary
 
 - `%link[rel stylesheet]` produces `<link rel=stylesheet>`
-
 - `$div[width 300]` produces `<div width=300></div>`
 - `$div[#ThirdElement width 300]` produces `<div id=ThirdElement width=300></div>`
 - `$div[width 300 .Wide .Dark]` produces `<div width=300 class="Wide Dark"></div>`
