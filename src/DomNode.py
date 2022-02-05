@@ -75,7 +75,8 @@ class DomNodeText(DomNode):
 
 
 class DoctypeNode(DomNode):
-  def __init__(self):
+  def __init__(self, doctype):
     super().__init__('__doctype__')
     self.isDoctype = True
     self.scopeless = True
+    self.doctype = doctype

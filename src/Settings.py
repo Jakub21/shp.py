@@ -32,4 +32,6 @@ class LangFunctions:
 
   @staticmethod
   def doctype(func, parser, scope):
-    scope.insertChild(DoctypeNode(), func.isNthChild)
+    try: parameter = func.parameters.id
+    except AttributeError: parameter = 'HTML'
+    scope.insertChild(DoctypeNode(parameter), func.isNthChild)
