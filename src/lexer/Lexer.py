@@ -1,6 +1,6 @@
-from src.Token import Token, Position
-from src.Settings import LangData
-from src.LexerState import LexerStateNormal
+from src.lexer.Position import Position
+from src.lexer.Token import Token
+from src.lexer.LexerStates import LexerStateDefault
 
 class Lexer:
   def __init__(self):
@@ -8,13 +8,14 @@ class Lexer:
 
   def reset(self):
     self.tokens = []
-    self.currentToken = Token('', [0,0])
-    self.state = LexerStateNormal(self)
+    self.currentToken = Token()
+    self.state = LexerStateDefault(self)
 
-  def tokenize(self, text):
+  def tokenize(self, shp):
     self.reset()
-    lines = text.split('\n')
+    lines = shp.split('\n')
     for lineNo, line in enumerate(lines):
       line += '\n' # for comment end detection
       for charNo in range(len(line)):
         self.state.tokenize(line, Position(lineNo, charNo))
+    return self.tokens

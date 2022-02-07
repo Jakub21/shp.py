@@ -105,7 +105,7 @@ To call a function, prefix its name with a `@`. Parameters can be added like it'
 
 #### `define[id] { body }`
 
-Creates a definition with ID `id`. 
+Creates a definition with ID `id`.
 
 #### `doctype[id]`
 
@@ -115,13 +115,19 @@ For example `@doctype[#OtherDoctype]` produces `<!DOCTYPE OtherDoctype>`
 
 #### `include[file as]`
 
-Include definitions from SHP file with path `file` and stores them in namespace called `as`. File extension is added automatically.
+Creates namespace with id `as` and pastes all definitions from file `file` in it. Preserves namespaces from included files.
 
 For example `@include[file './bar' as foo]` includes definitions from `./bar.shp `and saves them in `foo` namespace.
 
+#### `namespace[id] { definitions }`
+
+Creates a namespace with ID `id`. Used to avoid name conflict in definitions. Namespaces are automatically created by `include` functions.
+
 #### `paste[id from]`
 
-Copies body of a definition with ID `id` to where the function is called. Parameter `from` selects which namespace to use (by default it's empty).
+#### `paste[path]` **Alternative idea**
+
+Copies body of a definition with ID `id` to where the function is called. Parameter `from` selects which namespace to use (by default it's empty, which means current namespace is used). Parameter `from` is relative to the current location. Use `/` to access nested namespaces.
 
 #### Define / paste examples
 
@@ -132,6 +138,11 @@ File `bar.shp`
   $header {
     $h1 { Hello world! }
     $p { This header was defined in bar.shp }
+  }
+}
+@namespace[#controls] {
+  @define[#button] {
+    $button { Button from nested NS }
   }
 }
 ```
@@ -151,9 +162,19 @@ $html {
     @paste[#header from bar]
     $div[#content] {
       The rest of the content was defined in index.shp
+      @paste[#button from 'bar/controls']
     }
   }
 }
 ```
 
 Compiling `index.shp` produces the following result
+
+```html
+```
+
+
+
+# Usage as a CLI
+
+# Usage as a package
