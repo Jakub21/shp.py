@@ -10,7 +10,9 @@ def sanitizePath(path):
 class RootSource:
   def __init__(self, path):
     self.path = path
-    self.root = self.parseFile(path)
+
+  def parse(self):
+    self.root = self.parseFile(self.path)
     self.deps = self.traverseForDeps(self.root)
 
   def __str__(self):

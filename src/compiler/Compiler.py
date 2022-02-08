@@ -8,8 +8,15 @@ class Compiler:
   def __init__(self, entryPoint):
     self.root = RootSource(entryPoint)
     self.funcs = LangFuncsManager(self)
+    self.reset()
+
+  def reset(self):
+    self.funcs.reset()
+    self.includedFiles = []
 
   def compile(self):
+    self.reset()
+    self.root.parse()
     self._compile(self.root)
     tree = self.root.root
     tree.updateDepth(-1)
@@ -19,6 +26,7 @@ class Compiler:
   def _compile(self, source):
     subSources = self.resolveDeps(source)
     for sub in subSources:
+      self.includedFiles += [sub.path]
       sub.parse()
       self._compile(sub)
     source.resolve(subSources)

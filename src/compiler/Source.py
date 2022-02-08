@@ -19,7 +19,3 @@ class Source(RootSource):
 
   def __str__(self):
     return f'<Source "{self.path}">'
-
-  def parse(self):
-    self.root = self.parseFile(self.path)
-    self.deps = self.traverseForDeps(self.root)
