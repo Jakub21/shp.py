@@ -14,11 +14,23 @@ You can enable syntax coloring for SHP in the following way
 - Choose `Import` and select `./npp_udl_shp.xml` from this repository
 - Go back to `Language` tab and select `shp` from the list.
 
+# Installation
+
+To install the package, download it from PIP
+
+```
+pip install shp
+```
+
 # CLI usage
 
-**I will provide a way to install the package soon**
+There is `shp.compile` executable module available
 
-Script entry point is `./main.py`
+Run the following in your terminal
+
+```
+python -m shp.compile <source> <target> <--watch>
+```
 
 Arguments:
 
@@ -26,11 +38,19 @@ Arguments:
 - `target` (required) - Path to the target HTML file
 - `-w --watch` - Recompile whenever entry point file or any other included file is edited
 
-# Usage as a package
+# Using SHP as a package
 
-**TO DO**
+Using top-level `SHP` class
 
-For now look at `./src/shp.py`
+```python
+from shp import SHP
+# create an instance
+shp = SHP(sourcePath, targetPath)
+# compile once
+shp.compile()
+# compile once, set up a watchdog and block further execution
+shp.watch()
+```
 
 # SHP Syntax
 
