@@ -14,12 +14,31 @@ You can enable syntax coloring for SHP in the following way
 - Choose `Import` and select `./npp_udl_shp.xml` from this repository
 - Go back to `Language` tab and select `shp` from the list.
 
+# CLI usage
+
+**I will provide a way to install the package soon**
+
+Script entry point is `./main.py`
+
+Arguments:
+
+- `source` (required) - Path to the SHP source file (entry point)
+- `target` (required) - Path to the target HTML file
+- `-w --watch` - Recompile whenever entry point file or any other included file is edited
+
+# Usage as a package
+
+**TO DO**
+
+For now look at `./src/shp.py`
+
 # SHP Syntax
 
 General example
 
 ```shp
-@doctype[#HTML]
+// This is a general SHP Syntax example
+@doctype
 $html {
   $head {
     %meta[charset 'utf-8']
@@ -115,66 +134,221 @@ For example `@doctype[#OtherDoctype]` produces `<!DOCTYPE OtherDoctype>`
 
 #### `include[file as]`
 
-Creates namespace with id `as` and pastes all definitions from file `file` in it. Preserves namespaces from included files.
+Creates namespace with id `as` and pastes all content from file `file` in it. Preserves namespaces from included files.
 
-For example `@include[file './bar' as foo]` includes definitions from `./bar.shp `and saves them in `foo` namespace.
+For example `@include[file 'bar' as foo]` copies content from `./bar.shp `and saves it in `foo` namespace. Note that `./` prefix and file extension is not present.
 
-#### `namespace[id] { definitions }`
+#### `namespace[id] { body }`
 
-Creates a namespace with ID `id`. Used to avoid name conflict in definitions. Namespaces are automatically created by `include` functions.
+Creates a namespace with ID `id`. Used to avoid name conflicts in `define` and `paste` calls. Namespaces are automatically created by `include` functions.
+
+Namespaces can be nested. Relative path is always used in other functions' calls.
 
 #### `paste[id from]`
 
-#### `paste[path]` **Alternative idea**
-
 Copies body of a definition with ID `id` to where the function is called. Parameter `from` selects which namespace to use (by default it's empty, which means current namespace is used). Parameter `from` is relative to the current location. Use `/` to access nested namespaces.
 
-#### Define / paste examples
+## Functions - examples
 
-File `bar.shp`
-
-```shp
-@define[#header] {
-  $header {
-    $h1 { Hello world! }
-    $p { This header was defined in bar.shp }
-  }
-}
-@namespace[#controls] {
-  @define[#button] {
-    $button { Button from nested NS }
-  }
-}
-```
+#### Doctype
 
 File `index.shp` (entry point)
 
 ```shp
-@include[file './bar' as bar]
+@doctype
+@doctype[#EXAMPLE]
+```
 
-@doctype[#HTML]
+Result
+
+```html
+<!DOCTYPE HTML>
+<!DOCTYPE EXAMPLE>
+```
+
+#### General define / paste
+
+File `index.shp` (entry point)
+
+```shp
+@define[#foo] {
+  $p { Foo content }
+}
+@paste[#foo]
+```
+
+Result
+
+```html
+<p>Foo content</p>
+```
+
+#### General namespaces
+
+Definitions from namespaces can be accessed in the following ways:
+
+- Inside the namespace, then its ID is not required
+- Outside the namespace with specifying its ID
+- Inside another namespace with the same ID, not repeating the ID in the paste call
+
+File `index.shp` (entry point)
+
+```shp
+@namespace[#bar] {
+  @define[#foo] {
+    $p { Foo content }
+  }
+  @paste[#foo]
+}
+
+@paste[#foo from bar]
+
+@namespace[$bar] {
+  @paste[#foo]
+}
+```
+
+Result
+
+```html
+<p>Foo content</p>
+<p>Foo content</p>
+<p>Foo content</p>
+```
+
+#### Accessing nested namespaces
+
+File `index.shp` (entry point)
+
+```shp
+@namespace[#outer] {
+  @namespace[#inner] {
+    @define[#nested] {
+      $p { Nested content }
+    }
+  }
+  @paste[#nested from inner]
+}
+@paste[#nested from 'outer/inner']
+```
+
+Result
+
+```html
+<p>Nested content</p>
+<p>Nested content</p>
+```
+
+#### Simple definition include
+
+File `index.shp` (entry point)
+
+```shp
+@include[file bar as barNS]
+$p { Index was the entry point }
+@paste[#foo from barNS]
+```
+
+File `bar.shp`
+
+```shp
+@define[#foo] {
+  $p { But bar.shp content is included }
+}
+```
+
+Result
+
+```html
+<p>Index was the entry point</p>
+<p>But bar.shp content is included</p>
+```
+
+#### Simple content include
+
+File `index.shp` (entry point)
+
+```shp
+@doctype
 $html {
   $head {
     %meta[charset 'utf-8']
-    $title { SHP Example }
+    @include[file brain as brain]
+    $title {Example}
+  }
+  $body
+}
+```
+
+File `brain.shp`
+
+```shp
+$script[src 'lib/Domi.js']
+$script[src 'lib/shp.js']
+```
+
+Result
+
+```html
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset 'utf-8'>
+        <script src 'lib/Domi.js'></script>
+        <script src 'lib/shp.js'></script>
+        <title>Example</title>
+    </head>
+    <body>
+    </body>
+</html>
+```
+
+#### Nested include and directories
+
+File `index.shp` (entry point)
+
+```shp
+@doctype
+$html {
+  $head {
+    %meta[charset 'utf-8']
   }
   $body {
-    @paste[#header from bar]
-    $div[#content] {
-      The rest of the content was defined in index.shp
-      @paste[#button from 'bar/controls']
-    }
+    $p {Index content}
+    @include[file 'component/footer' as footer]
   }
 }
 ```
 
-Compiling `index.shp` produces the following result
+File `component/footer.shp`
 
-```html
+```shp
+$footer {
+  $p {This is a footer}
+  @include[file copyright as cp]
+}
 ```
 
+File `component/copyright.shp`
 
+```shp
+$p {Made by me, 2022}
+```
 
-# Usage as a CLI
+Result
 
-# Usage as a package
+```html
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset 'utf-8'>
+  </head>
+  <body>
+    <p>Index content</p>
+    <footer>
+      <p>This is a footer</p>
+      <p>Made by me, 2022</p>
+    </footer>
+  </body>
+</html>
+```
