@@ -1,7 +1,7 @@
-from src.compiler.RootSource import RootSource
-from src.compiler.Source import Source
-from src.compiler.LangFuncsManager import LangFuncsManager
-from src.builder.Builder import Builder
+from shp.compiler.RootSource import RootSource
+from shp.compiler.Source import Source
+from shp.compiler.LangFuncsManager import LangFuncsManager
+from shp.builder.Builder import Builder
 import os
 
 class Compiler:

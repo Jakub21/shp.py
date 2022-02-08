@@ -1,4 +1,4 @@
-from src.parser.Nodes import Node, NodeScoped, NodeFunction
+from shp.parser.Nodes import Node, NodeScoped, NodeFunction
 from Namespace import Namespace
 
 class ParserState:

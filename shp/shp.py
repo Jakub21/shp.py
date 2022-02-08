@@ -1,5 +1,5 @@
-from src.compiler.Compiler import Compiler
-from src.Watchdog import Watchdog
+from shp.compiler.Compiler import Compiler
+from shp.Watchdog import Watchdog
 from time import sleep
 
 class SHP:

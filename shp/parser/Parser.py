@@ -1,6 +1,6 @@
-from src.parser.ParserStates import ParserStateDefault
-from src.parser.Nodes import NodeScoped
-from src.lexer.Position import Position
+from shp.parser.ParserStates import ParserStateDefault
+from shp.parser.Nodes import NodeScoped
+from shp.lexer.Position import Position
 
 class Parser:
   def __init__(self):

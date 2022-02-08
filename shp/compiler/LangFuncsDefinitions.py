@@ -1,7 +1,7 @@
 from Namespace import Namespace
-from src.compiler.Definition import Definition
-from src.compiler.ShpDefinitions import ShpDefinitions as SHPDEF
-from src.parser.Nodes import NodeData
+from shp.compiler.Definition import Definition
+from shp.compiler.ShpDefinitions import ShpDefinitions as SHPDEF
+from shp.parser.Nodes import NodeData
 
 def _define(manager, call):
   manager.defs.append(Definition(call))

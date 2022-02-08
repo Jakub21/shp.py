@@ -1,4 +1,4 @@
-from src.compiler.RootSource import RootSource
+from shp.compiler.RootSource import RootSource
 import os
 
 class Source(RootSource):

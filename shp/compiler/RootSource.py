@@ -1,7 +1,7 @@
-from src.lexer.Lexer import Lexer
-from src.parser.Parser import Parser
-from src.parser.Nodes import NodeFunction
-from src.compiler.Dependency import Dependency
+from shp.lexer.Lexer import Lexer
+from shp.parser.Parser import Parser
+from shp.parser.Nodes import NodeFunction
+from shp.compiler.Dependency import Dependency
 
 def sanitizePath(path):
   return path.replace('\\', '/')

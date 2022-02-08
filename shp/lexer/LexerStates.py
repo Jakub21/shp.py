@@ -1,6 +1,6 @@
-from src.lexer.Position import Position
-from src.lexer.Token import Token
-from src.compiler.ShpDefinitions import ShpDefinitions as SHPDEF
+from shp.lexer.Position import Position
+from shp.lexer.Token import Token
+from shp.compiler.ShpDefinitions import ShpDefinitions as SHPDEF
 
 class LexerState:
   def __init__(self, lexer):

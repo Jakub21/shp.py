@@ -1,7 +1,7 @@
 import os
 from argparse import ArgumentParser
 from Namespace import Namespace
-from src.shp import SHP
+from shp.shp import SHP
 
 def main(args):
   source = os.path.abspath(args.source).replace('\\', '/')

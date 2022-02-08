@@ -1,2 +1,5 @@
+build
 data
+dist
+shp.egg-info
 __pycache__

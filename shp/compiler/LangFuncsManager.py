@@ -1,5 +1,5 @@
 from Namespace import Namespace
-from src.compiler.LangFuncsDefinitions import definitions
+from shp.compiler.LangFuncsDefinitions import definitions
 
 class Call:
   def __init__(self, node):

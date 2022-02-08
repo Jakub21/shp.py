@@ -1,4 +1,4 @@
-from src.compiler.ShpDefinitions import ShpDefinitions
+from shp.compiler.ShpDefinitions import ShpDefinitions
 
 class Dependency:
   def __init__(self, source, includeNode):
