@@ -15,13 +15,17 @@ class SHP:
     with open(self.target, 'w') as file:
       file.write(html)
 
-  def watch(self):
+  def watch(self, noBlock=False):
     self.onUpdate()
-    self.run()
+    if not noBlock: self.run()
 
   def onUpdate(self):
     self.compile()
     self.watchdog.updateWatchList([self.source] + self.compiler.includedFiles)
+
+  def stop(self):
+    print('[SHP] Interrupted')
+    self.watchdog.stopAll()
 
   def run(self):
     print('[SHP] Press Ctrl+C to stop')
@@ -29,5 +33,4 @@ class SHP:
       while True:
         sleep(.1)
     except KeyboardInterrupt:
-      print('[SHP] Interrupted')
-    self.watchdog.stopAll()
+      self.stop()

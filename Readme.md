@@ -40,7 +40,7 @@ Arguments:
 
 # Using SHP as a package
 
-Using top-level `SHP` class
+Using `SHP` class to compile from a single entry-point
 
 ```python
 from shp import SHP
@@ -50,6 +50,37 @@ shp = SHP(sourcePath, targetPath)
 shp.compile()
 # compile once, set up a watchdog and block further execution
 shp.watch()
+```
+
+Using `MultiSHP` class to compile from multiple entry-points
+
+```python
+from shp import MultiSHP
+# create an instance
+mp = MultiSHP()
+# add sources and their corresponding targets
+mp.add(firstSource, firstTarget)
+mp.add(secondSource, secondTarget)
+# compile all sources
+mp.compile()
+# compile all sources, set up their watchdogs and blocks further execution
+mp.watch()
+```
+
+#### Watching with out blocking
+
+Method responsible for watching can have their blocking disabled by passing `noBlock=False` argument. This works for both `SHP` and `MultiSHP` classes. Make sure the script does not exit.
+
+```python
+shp.watch(False)
+mp.watch(False)
+```
+
+You should stop the watchers before your program ends.
+
+```python
+shp.stop()
+mp.stop()
 ```
 
 # SHP Syntax
