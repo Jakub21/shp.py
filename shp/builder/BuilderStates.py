@@ -20,7 +20,7 @@ class BuilderStateScopeless(BuilderState):
   def build(self, node):
     if self.checkIsData(node): return
     if self.checkIsScoped(node): return
-    self.builder.html += f'<{node.tagName}{self.buildParameters(node)}/>'
+    self.builder.html += f'<{node.tagName}{self.buildParameters(node)}>'
 
   def checkIsData(self, node):
     if node.tagName == '__data__':
