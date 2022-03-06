@@ -1,6 +1,6 @@
 from Namespace import Namespace
 
-ShpDefinitions = Namespace(
+SHPDEF = Namespace(
   TagOpen = '[',
   TagClose = ']',
   TagNameScoped = '$',
@@ -13,5 +13,5 @@ ShpDefinitions = Namespace(
   FunctionName = '@',
   Literal = '\'',
   Comment = '//',
-  DefaultDoctype = 'HTML',
+  DefaultDoctype = 'HTML'
 )

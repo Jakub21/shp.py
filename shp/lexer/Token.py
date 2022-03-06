@@ -1,5 +1,5 @@
 from shp.lexer.Position import Position
-from shp.compiler.ShpDefinitions import ShpDefinitions as SHPDEF
+from shp.lexer.SHPDEF import SHPDEF
 
 class Token:
   def __init__(self, data='', pos=None):

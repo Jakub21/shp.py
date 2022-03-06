@@ -8,12 +8,15 @@ class Watchdog:
     self.callback = callback
 
   def updateWatchList(self, watchlist):
-    for path in watchlist:
-      if not self.isWatching(path):
-        self.addWatcher(FileWatcher(path, self.callback))
+    self.addToWatchList(watchlist)
     for watcher in self.watchers:
       if watcher.path not in watchlist:
         self.removeWatcher(watcher)
+
+  def addToWatchList(self, watchlist):
+    for path in watchlist:
+      if not self.isWatching(path):
+        self.addWatcher(FileWatcher(path, self.callback))
 
   def addWatcher(self, watcher):
     print('[Watchdog] Watching file', watcher.path)
@@ -35,8 +38,7 @@ class Watchdog:
 class FileWatcher:
   def __init__(self, path, callback):
     dir = os.path.dirname(path)
-    fn = path.split('/')[-1]
-    eventHandler = EventHandler(fn, callback)
+    eventHandler = EventHandler(path, callback)
     self.path = path
     self.observer = Observer()
     self.observer.schedule(eventHandler, dir, recursive=False)
@@ -48,10 +50,12 @@ class FileWatcher:
 
 
 class EventHandler(PatternMatchingEventHandler):
-  def __init__(self, fn, callback, *args):
-    super().__init__(patterns=['*/'+fn])
+  def __init__(self, path, callback, *args):
+    super().__init__(patterns=['*/'+path.split('/')[-1]])
+    self.path = path
     self.callback = callback
     self.args = args
 
   def on_modified(self, event):
+    print(f'[Watchdog] Detected changes in "{self.path}"')
     self.callback(*self.args)

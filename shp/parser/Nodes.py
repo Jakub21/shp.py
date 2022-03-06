@@ -1,4 +1,3 @@
-from shp.compiler.ShpDefinitions import ShpDefinitions as SHPDEF
 from Namespace import Namespace
 
 class Node:
