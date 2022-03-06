@@ -185,13 +185,16 @@ For example `@doctype[#OtherDoctype]` produces `<!DOCTYPE OtherDoctype>`
 
 #### `include[file as]`
 
-Creates namespace with id `as` and pastes all content from file `file` in it. Preserves namespaces from included files.
+Copies the content of selected file in its own place. Namespaces from included files are preserved.
 
-For example `@include[file 'bar' as foo]` copies content from `./bar.shp `and saves it in `foo` namespace. Note that `./` prefix and file extension is not present.
+To wrap the copied content in a namespace, use the optional `as` parameter. This defines the ID.
+
+Note that `./` prefix and file extension are excluded.
+
 
 #### `namespace[id] { body }`
 
-Creates a namespace with ID `id`. Used to avoid name conflicts in `define` and `paste` calls. Namespaces are automatically created by `include` functions.
+Creates a namespace with ID `id`. Used to avoid name conflicts in `define` and `paste` calls. Namespaces can be automatically created by `include` functions.
 
 Namespaces can be nested. Relative path is always used in other functions' calls.
 
@@ -295,9 +298,9 @@ Result
 File `index.shp` (entry point)
 
 ```shp
-@include[file bar as barNS]
+@include[file bar]
 $p { Index was the entry point }
-@paste[#foo from barNS]
+@paste[#foo]
 ```
 
 File `bar.shp`
@@ -324,7 +327,7 @@ File `index.shp` (entry point)
 $html {
   $head {
     %meta[charset 'utf-8']
-    @include[file brain as brain]
+    @include[file 'brain']
     $title {Example}
   }
   $body
@@ -366,7 +369,7 @@ $html {
   }
   $body {
     $p {Index content}
-    @include[file 'component/footer' as footer]
+    @include[file 'component/footer']
   }
 }
 ```
@@ -376,7 +379,7 @@ File `component/footer.shp`
 ```shp
 $footer {
   $p {This is a footer}
-  @include[file copyright as cp]
+  @include[file copyright]
 }
 ```
 
@@ -403,3 +406,51 @@ Result
   </body>
 </html>
 ```
+
+#### Templates based design
+
+Generally include is used to paste content or definitions into your entry point file.
+
+However, there is an alternative approach. You can define the general tree structure in a template file and add paste statements there. Then, in your entry point file create definitions with content unique for each page. This completely removes the redundancy of the general HTML structure and common head contents.
+
+File `index.shp` (entry point)
+
+```shp
+@include [template/general]
+@define[#Body] {
+  $div { Hello world! }
+}
+```
+
+File `template/general.shp`
+
+```shp
+@doctype
+$html {
+  $head {
+    %meta[charset 'utf-8']
+    $title { Reusability! }
+  }
+  $body {
+    $header { This is a header }
+    @paste[#Body]
+  }
+}
+```
+
+Result
+
+```html
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset 'utf-8'>
+    <title> Reusability! </title>
+  </head>
+  <body>
+    <header>This is a header</header>
+    <div>Hello world!</div>
+  </body>
+</html>
+```
+
