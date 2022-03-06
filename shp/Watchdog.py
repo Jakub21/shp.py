@@ -15,8 +15,10 @@ class Watchdog:
 
   def addToWatchList(self, watchlist):
     for path in watchlist:
-      if not self.isWatching(path):
-        self.addWatcher(FileWatcher(path, self.callback))
+      if self.isWatching(path): continue
+      try: self.addWatcher(FileWatcher(path, self.callback))
+      except FileNotFoundError:
+        print(f'[Watchdog] Can not watch file that does not exist ({path})')
 
   def addWatcher(self, watcher):
     print('[Watchdog] Watching file', watcher.path)
