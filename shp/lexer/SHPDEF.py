@@ -13,5 +13,7 @@ SHPDEF = Namespace(
   FunctionName = '@',
   Literal = '\'',
   Comment = '//',
-  DefaultDoctype = 'HTML'
+  DefaultDoctype = 'HTML',
+  IncludePathFromRoot = '*/',
+  IncludePathBack = '^',
 )

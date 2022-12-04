@@ -14,9 +14,8 @@ class FuncInclude(Function):
     try: path = self.node.params.file.replace(SHPDEF.Literal, '')
     except AttributeError:
       raise ShpFunctionParamNotFoundError(self.name, 'file')
-    path = op.join(op.abspath(op.dirname(self.source.path)), path + '.shp')
-    path = self.source._sanitizePath(path)
-    self.dep = Source(self.source.compiler, path)
+    realPath = self.getRealPath(path)
+    self.dep = Source(self.source.compiler, realPath)
     self.source.addDependency(self.dep)
 
   def execute(self):
@@ -29,3 +28,17 @@ class FuncInclude(Function):
     except KeyError: pass
     self.node.replaceSelf(nsNode)
     self.source.injectFuncNode(nsNode)
+
+  def getRealPath(self, pathParam):
+    if pathParam.startswith(SHPDEF.IncludePathFromRoot):
+      root = self.source.compiler.entryPoint.path
+      pathParam = pathParam[len(SHPDEF.IncludePathFromRoot):]
+    else:
+      root = self.originalSource.path
+    while pathParam.startswith(SHPDEF.IncludePathBack):
+      root = '/'.join(root.split('/')[:-1])
+      pathParam = pathParam[len(SHPDEF.IncludePathBack):]
+    directory = op.dirname(root)
+    path = op.join(op.abspath(directory), pathParam + '.shp')
+    path = self.source._sanitizePath(path)
+    return path

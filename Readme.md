@@ -189,10 +189,11 @@ Copies the content of selected file in its own place. Namespaces from included f
 
 To wrap the copied content in a namespace, use the optional `as` parameter. This defines the ID.
 
-Note that `./` prefix and file extension are excluded.
+Note that file extensions are excluded. The usual `~/` and `./` prefixes probably won't work.
 
+Dy default, all paths are relative to a file that the include statement is present in. To use paths relative to the entry point, add `*/` prefix. To go to parent directory use `^` (this can be used multiple times).
 
-#### `namespace[id] { body }`
+#### `namespace[id] { body }`
 
 Creates a namespace with ID `id`. Used to avoid name conflicts in `define` and `paste` calls. Namespaces can be automatically created by `include` functions.
 
