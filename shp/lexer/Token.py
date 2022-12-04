@@ -4,6 +4,7 @@ from shp.lexer.SHPDEF import SHPDEF
 class Token:
   def __init__(self, data='', pos=None):
     self.data = data
+    self.followingSpace = ''
     self.pos = Position(0,0) if pos is None else pos
     self.detectType()
 
@@ -17,6 +18,9 @@ class Token:
   def append(self, data):
     self.data += data
     self.detectType()
+
+  def appendSpace(self, data):
+    self.followingSpace += data
 
   def isEmpty(self):
     return self.data == ''

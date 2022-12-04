@@ -28,7 +28,9 @@ class LexerState:
 class LexerStateDefault(LexerState):
   def tokenize(self, line, pos):
     self.lexer.currentToken.initalize(pos)
-    if self.checkWhitespace(line, pos): return
+    if self.checkWhitespace(line, pos):
+      self.lexer.currentToken.appendSpace(line[pos.char])
+      return
     if self.checkIsComment(line, pos): return
     if self.checkStructural(line, pos): return
     self.checkIsLiteral(line, pos)
