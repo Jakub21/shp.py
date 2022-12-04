@@ -1,3 +1,4 @@
+from shp.errors import *
 from shp.compiler.Compiler import Compiler
 from shp.Watchdog import Watchdog
 from time import sleep
@@ -25,7 +26,10 @@ class SHP:
 
   def compile(self):
     print(f'[SHP] Compiling "{self.target}"')
-    result = self.compiler.compile()
+    try: result = self.compiler.compile()
+    except ShpError:
+      errPrint(self, result.error)
+      return
     if result.success:
       with open(self.target, 'w') as file:
         file.write(result.html)
