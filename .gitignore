@@ -4,3 +4,4 @@ data
 dist
 shp.egg-info
 __pycache__
+.idea

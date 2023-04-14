@@ -7,10 +7,10 @@ Lexer base class. Converts raw text to a list of tokens.
 
 __all__ = ['Lexer']
 
-from ..errors import LexerError
+from ..common.errors import LexerError
 from .states import getState, StateDefault, StateLiteral
 from .token import Token
-from ..position import Position
+from ..common.position import Position
 
 
 class Lexer:

@@ -7,8 +7,6 @@ Document node class.
 
 __all__ = ['Node']
 
-from ...position import Position
-
 
 class Node:
   def __init__(self):

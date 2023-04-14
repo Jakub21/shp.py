@@ -5,7 +5,7 @@ Jakub21, 2022 Q4
 Token
 """
 
-from ..LANG import TOKEN_TYPE
+from ..common.LANG import TOKEN_TYPE
 
 
 class Token:

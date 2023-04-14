@@ -5,7 +5,7 @@ Jakub21, 2022 Q4
 Individual tokenization rules used by lexer states.
 """
 
-from ..LANG import LANG, WHITESPACE, TOKEN_TYPE
+from ..common.LANG import LANG, WHITESPACE, TOKEN_TYPE
 
 
 class LexerRule:

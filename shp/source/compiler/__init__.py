@@ -1,10 +1,10 @@
 """
 Static HTML Preprocessor
-Jakub21, 2022 Q4
+Jakub21, 2023 Q2
 --------------------------------
 __init__
 """
 
-__all__ = ['Node']
+__all__ = ['Compiler']
 
-from .node import Node
+from .compiler import Compiler

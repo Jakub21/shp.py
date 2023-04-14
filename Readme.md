@@ -43,7 +43,8 @@ Arguments:
 Using `SHP` class to compile from a single entry-point
 
 ```python
-from shp import SHP
+from source import SHP
+
 # create an instance
 shp = SHP(sourcePath, targetPath)
 # compile once
@@ -55,7 +56,8 @@ shp.watch()
 Using `MultiSHP` class to compile from multiple entry-points
 
 ```python
-from shp import MultiSHP
+from source import MultiSHP
+
 # create an instance
 mp = MultiSHP()
 # add sources and their corresponding targets
@@ -454,4 +456,3 @@ Result
   </body>
 </html>
 ```
-
