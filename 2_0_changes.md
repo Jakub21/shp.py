@@ -1,8 +1,10 @@
 # Planned SHP 2.0 changes
-These changes are breaking compatibality with SHP 1
+These changes are breaking compatibility with SHP 1
+
 
 ## General
-- All functional characters can be escaped with a `\`
+
+- All functional characters can be escaped with a `\ `
 - Automatic detection whether a tag is scoped. Tags are prefixed with a `$`.
   ```shp
   $body {
@@ -17,7 +19,7 @@ These changes are breaking compatibality with SHP 1
     until unescaped close bracked is encountered
   }
   %style { // explicit preform.
-    html {margin: 0}
+    html {margin: 0\}
   }
   ```
 - Add an option to add a space after otherwise not preformatted tags with a `_` suffix. By default the tags are not separated by spaces.
@@ -25,9 +27,16 @@ These changes are breaking compatibality with SHP 1
   $b_ {Hello} world // <b>hello</b> world
   $b {Ban} ana // <b>Ban</b>ana
   ```
+- Automatically escape HTML functional characters
+  ```shp
+  $p {In <p> you can define paragraphs}
+  // <p>In &lt;p&gt; you can define paragraphs</p>
+  ```
+
 
 ## Tag attributes
-- Restore equal sign `=` in attributes with out quick prefix
+
+- Restore equal sign `=` in attributes without quick prefix
   ```shp
   $img[#BannerLogo src="path/to/img.png"]
   ```
@@ -38,11 +47,13 @@ These changes are breaking compatibality with SHP 1
   $video[!controls] // controls = false
   ```
 
+
 ## Functions
+
 - Functions now accept variables for easier formatting, example
   ```shp
   @define[#MySection ?sectionID] {
-    $section[#@[sectionID]]
+    $section[#?[sectionID]]
   }
   ```
 - New pair of functions was added: `@slot` / `@insert`, define a slot once and insert into it many times, example
@@ -51,3 +62,4 @@ These changes are breaking compatibality with SHP 1
   @insert[#head] {$meta[charset='utf-8']}
   @insert[#head] {$title {My webpage}}
   ```
+  When no content is inserted into the slot there should be a way to provide a default value
