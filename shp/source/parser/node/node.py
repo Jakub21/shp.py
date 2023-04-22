@@ -7,6 +7,8 @@ Document node class.
 
 __all__ = ['Node']
 
+from namespace import Namespace
+
 
 class Node:
   def __init__(self):
@@ -14,14 +16,18 @@ class Node:
     self.type_ = ''
     self.tag = ''
     self.content = ''
-    self.attributes = {}
+    self.attributes = Namespace({})
     self.depth = 0
     self.parent = None
     self.position = None  # position.copy() if position is not None else None
 
   def __str__(self):
-    attrs = ' '.join([f'{k}:{v}' for k, v in self.attributes.items()])
-    return f'<{self.tag} ({self.type_}) "{self.shortContent()}" {attrs}>'
+    attrs = ' '.join([f'{k}={v}' for k, v in self.attributes.items()])
+    result = f'<({self.type_})'
+    result += f' {self.tag}' if self.tag else ''
+    result += f' "{self.shortContent()}"' if self.shortContent() else ''
+    result += f' {attrs}' if attrs else ''
+    return result + '>'
 
   def treeRepr(self, indent='    '):
     result = f'{indent * self.depth}{self}'
@@ -47,6 +53,19 @@ class Node:
     while '  ' in content:
       content = content.replace('  ', ' ')
     return content
+
+  def replace_with(self, *others):
+    idx = self.parent.children.index(self)
+    del self.parent.children[idx]
+    self.parent.children = self.parent.children[:idx] + list(others) + self.parent.children[idx:]
+    for other in others:
+      other.parent = self.parent
+      other.set_depth(self.depth)
+
+  def set_depth(self, depth):
+    self.depth = depth
+    for child in self.children:
+      child.set_depth(depth+1)
 
   @classmethod
   def Root(cls):

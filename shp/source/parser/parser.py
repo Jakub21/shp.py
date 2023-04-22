@@ -12,23 +12,12 @@ from .node import Node
 
 
 class Parser:
-  def __init__(self):
-    self.state = None # current state
-    self._tokens = None # list of tokens fed to the parser
-    self._index = None # index of the currently parsed token
-    self._tree = None # DOM tree abstraction made of Nodes
-    self.selection = None # currently selected node
-    self.reset()
-
-  def reset(self):
-    self.state = StateDefault(self)
-    self._tokens = []
-    self._index = 0
-    self._tree = Node.Root()
-    self.selection = self._tree
-
-  def feed(self, tokens):
-    self._tokens = tokens
+  def __init__(self, tokens=None):
+    self.state = StateDefault(self) # current state
+    self._tokens = tokens or [] # list of tokens fed to the parser
+    self._index = 0 # index of the currently parsed token
+    self.tree = Node.Root() # DOM tree abstraction made of Nodes
+    self.selection = self.tree # currently selected node
 
   def parse(self):
     for index, token in enumerate(self._tokens):
@@ -46,4 +35,4 @@ class Parser:
     self.selection = node
 
   def treeRepr(self, indent='    '):
-    return self._tree.treeRepr(indent)
+    return self.tree.treeRepr(indent)

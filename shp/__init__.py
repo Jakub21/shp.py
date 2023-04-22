@@ -5,10 +5,10 @@ Jakub21, 2022 Q4
 __init__
 """
 
-__all__ = ['Lexer', 'Parser', 'ROOT']
+__all__ = ['Compiler', 'Dependency', 'Lexer', 'Parser', 'ROOT']
 
 from pathlib import Path
 
-from .source import Lexer, Parser
+from .source import Compiler, Dependency, Lexer, Parser
 
 ROOT = Path(__file__).parent

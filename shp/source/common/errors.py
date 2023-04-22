@@ -16,3 +16,7 @@ class LexerError(ShpError):
 
 class ParserError(ShpError):
   pass
+
+
+class ShpDependencyError(ShpError):
+  pass

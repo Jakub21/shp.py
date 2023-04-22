@@ -5,6 +5,8 @@ Jakub21, 2022 Q4
 Individual parsing rules used by parser states.
 """
 
+from ..common.LANG import TOKEN_TYPE
+from ..common.errors import ParserError
 from .node import Node
 
 
@@ -106,8 +108,23 @@ class RuleAttrsQuickFlag(ParserRule):
 
 class RuleAttrsKeyValCycle(ParserRule):
   def run(self):
-    
+    if self.parser.state.phase == self.parser.state.Phases.KEY:
+      self.check_is_val_sign(False)
+      self.parser.state.current_key = self.parser.currentToken.data
+    if self.parser.state.phase == self.parser.state.Phases.EQUALS:
+      self.check_is_val_sign(True)
+    if self.parser.state.phase == self.parser.state.Phases.VALUE:
+      self.check_is_val_sign(False)
+      self.parser.selection.addAttribute(self.parser.state.current_key, self.parser.currentToken.data)
+    self.parser.state.next_phase()
     return False  # must be the last rule, can process all tokens
+
+  def check_is_val_sign(self, expected):
+    match = self.parser.currentToken.data == TOKEN_TYPE.AttrValue
+    if match and not expected:
+      raise ParserError(f'Unexpected {TOKEN_TYPE.AttrValue} sign')
+    if not match and expected:
+      raise ParserError(f'Expected {TOKEN_TYPE.AttrValue} sign')
 
 
 class RuleExitNodeAttrs(ParserRule):

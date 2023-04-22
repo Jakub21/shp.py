@@ -6,7 +6,7 @@ All special characters in the SHP markup and HTML data for the auto void tag
 detection feature
 """
 
-__all__ = ['LANG', 'HTML', 'TOKEN_TYPE', 'WHITESPACE']
+__all__ = ['LANG', 'TOKEN_TYPE', 'WHITESPACE', 'HTML', 'HTML_BUILD']
 
 from namespace import Namespace
 
@@ -33,8 +33,9 @@ LANG = Namespace.Kwargs(
     Close = '}',
   ),
   PATH = Namespace.Kwargs(
-    ParentDir = '^',
-    FromEntry = '_/',
+    ParentDir = '<',
+    Separator = '.',
+    # FromEntry = '$/',
   ),
   Variable = '?',
   Literal = '"',
@@ -42,13 +43,6 @@ LANG = Namespace.Kwargs(
   Comment = '//',
 )
 
-HTML = Namespace.Kwargs(
-  Doctype = 'HTML',
-  Void = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
-    'link', 'meta', 'param', 'source', 'track', 'wbr'
-  ],
-  Preform = ['pre'],
-)
 
 TOKEN_TYPE = Namespace.Kwargs(
   # Type = Prefix
@@ -70,6 +64,21 @@ TOKEN_TYPE = Namespace.Kwargs(
 
 
 WHITESPACE = [' ', '\r', '\n', '\t']
+
+
+HTML = Namespace.Kwargs(
+  DoctypeDefault = 'HTML',
+  Void = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+    'link', 'meta', 'param', 'source', 'track', 'wbr'
+  ],
+  Preform = ['pre'],
+)
+
+
+HTML_BUILD = Namespace.Kwargs(
+  DoctypeClause = '<!DOCTYPE {doctype}>',
+)
+
 
 # TODO
 # Token with any escaped character is always set to Text type, this could be problematic in the future

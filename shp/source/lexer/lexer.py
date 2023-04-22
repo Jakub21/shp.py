@@ -14,23 +14,12 @@ from ..common.position import Position
 
 
 class Lexer:
-  def __init__(self):
-    self.state = None # current state
-    self.data = None # data fed to the lexer
-    self.tokens = None # list of tokens
-    self.position = None # pointer to the current position
-    self.currentToken = None # currently edited token
-    self.reset()
-
-  def reset(self):
-    self.state = StateDefault(self)
-    self.tokens = []
-    self.position = Position(0, 0)
-    self.currentToken = Token()
-
-  def feed(self, data):
-    self.data = data
-    self.position = Position(0, 0)
+  def __init__(self, data=None):
+    self.state = StateDefault(self) # current state
+    self.data = data # data fed to the lexer
+    self.tokens = [] # list of tokens
+    self.position = Position(0, 0) # pointer to the current position
+    self.currentToken = Token() # currently edited token
 
   def tokenize(self):
     for char in self.data:

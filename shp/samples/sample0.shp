@@ -5,6 +5,7 @@ $html {
     $title {Hello world}
   }
   $body {
+    @include[file="sample1"]
     $div[#Main] {
       $h1[.Title] {Hello}
       $p {

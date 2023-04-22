@@ -9,6 +9,8 @@ __all__ = ['getState', 'StateDefault']
 
 from enum import Enum, auto
 
+from namespace import Namespace
+
 from .rules import *
 
 
@@ -45,10 +47,10 @@ class StateDefault(ParserState):
 
 class StateTagAttrs(ParserState):
 
-  class Phase(Enum):
-    Key = auto()
-    Sign = auto()
-    Value = auto()
+  class Phases:
+    KEY = 0
+    EQUALS = 1
+    VALUE = 2
 
   def __init__(self, parser):
     super().__init__(parser)
@@ -57,7 +59,11 @@ class StateTagAttrs(ParserState):
     RuleAttrsQuickFlag(self)
     RuleExitNodeAttrs(self)
     RuleAttrsKeyValCycle(self)
-    self.phase = self.Phase.Key
+    self.phase = 0
+    self.current_key = ''
+
+  def next_phase(self):
+    self.phase = (self.phase + 1) % 3
 
 
 # class StatePreformatted(ParserState):

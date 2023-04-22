@@ -8,3 +8,4 @@ __init__
 from .errors import *
 from .LANG import *
 from .position import Position
+from .filesystem import resolve_path
