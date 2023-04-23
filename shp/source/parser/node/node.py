@@ -73,6 +73,7 @@ class Node:
     obj = cls()
     obj.tag = 'root'
     obj.type_ = 'Root'
+    obj.depth = -1
     return obj
 
   @classmethod

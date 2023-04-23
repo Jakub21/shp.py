@@ -76,7 +76,17 @@ HTML = Namespace.Kwargs(
 
 
 HTML_BUILD = Namespace.Kwargs(
+  Indent = ' ' * 2,
   DoctypeClause = '<!DOCTYPE {doctype}>',
+  TagNameOpenStart = '<{tag}',
+  TagNameOpenEndScoped = '>',
+  TagNameOpenEndVoid = '/>',
+  TagNameClose = '</{tag}>',
+  TagAttribute = ' {key}={value}',
+  TagAttributeValueSep = ' ',
+  Content = '{content}',
+  FilePrefix = '<!-- Generated with SHP v2 -->',
+  FileSuffix = '\n'
 )
 
 

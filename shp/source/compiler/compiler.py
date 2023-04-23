@@ -11,6 +11,7 @@ entry_point must be an instance of Dependency
 __all__ = ['Compiler']
 
 from .traverser import Traverser
+from ..composer import Composer
 from ..executor import Executor
 
 
@@ -24,6 +25,8 @@ class Compiler:
     self._compile_dependency(self.entry_point)
     self.executor.launch_stage('define')
     self.executor.launch_stage('finalize')
+    composer = Composer(self.entry_point.tree)
+    return composer.compose()
 
   def _compile_dependency(self, start):
     start.parse()
