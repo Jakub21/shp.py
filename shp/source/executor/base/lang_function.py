@@ -10,14 +10,15 @@ from namespace import Namespace
 
 
 class LangFunction(ABC):
-  def __init__(self, dependency, node):
+  def __init__(self, executor, dependency, node):
+    self.executor = executor
     self.dependency = dependency
     self.node = node
     self.stage = Namespace.Kwargs(
-      TRAVERSE = False,
-      EXTEND = False,
-      DEFINE = False,
-      FINALIZE = False,
+      TRAVERSE = False,  # executed when the compiler searches for all function calls in the document
+      EXTEND = False,  # executed to merge all dependencies into one tree
+      DEFINE = False,  # priority execution on full tree
+      FINALIZE = False,  # secondary execution on full tree
     )
 
   def __repr__(self):

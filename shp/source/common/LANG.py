@@ -75,17 +75,34 @@ HTML = Namespace.Kwargs(
 )
 
 
+# HTML_BUILD = Namespace.Kwargs(
+#   Indent = ' ' * 2,
+#   DoctypeClause = '<!DOCTYPE {doctype}>',
+#   TagNameOpenStart = '\n{indent}<{tag}',
+#   TagNameOpenEndScoped = '>',
+#   TagNameOpenEndVoid = '/>',
+#   TagNameClose = '\n{indent}</{tag}>',
+#   TagAttribute = ' {key}={value}',
+#   TagAttributeValueSep = ' ',
+#   TagAttributeValueLiteral = '"',
+#   Content = '\n{indent}{content}',
+#   FilePrefix = '<!-- Generated with SHP v2 -->\n',
+#   FileSuffix = '\n'
+# )
+
+
 HTML_BUILD = Namespace.Kwargs(
-  Indent = ' ' * 2,
+  Indent = ' ',
   DoctypeClause = '<!DOCTYPE {doctype}>',
-  TagNameOpenStart = '<{tag}',
+  TagNameOpenStart = '\n{indent}<{tag}',
   TagNameOpenEndScoped = '>',
   TagNameOpenEndVoid = '/>',
   TagNameClose = '</{tag}>',
   TagAttribute = ' {key}={value}',
   TagAttributeValueSep = ' ',
+  TagAttributeValueLiteral = '"',
   Content = '{content}',
-  FilePrefix = '<!-- Generated with SHP v2 -->',
+  FilePrefix = '<!-- Generated with SHP v2 -->\n',
   FileSuffix = '\n'
 )
 

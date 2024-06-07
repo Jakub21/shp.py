@@ -7,14 +7,15 @@ Lexer base class. Converts raw text to a list of tokens.
 
 __all__ = ['Lexer']
 
-from ..common.errors import LexerError
+from ..common.errors import LexerUnmatchedLiteralError
 from .states import getState, StateDefault, StateLiteral
 from .token import Token
 from ..common.position import Position
 
 
 class Lexer:
-  def __init__(self, data=None):
+  def __init__(self, dependency, data=None):
+    self.dependency = dependency  # dependency reference for error tracking
     self.state = StateDefault(self) # current state
     self.data = data # data fed to the lexer
     self.tokens = [] # list of tokens
@@ -30,7 +31,7 @@ class Lexer:
   def validate(self):
     # TODO: Make an actual validator
     if isinstance(self.state, StateLiteral):
-      raise LexerError('Unexpected end of data: A literal string was not closed')
+      raise LexerUnmatchedLiteralError(self.dependency)
 
   def changeState(self, name):
     self.state = getState(name)(self, self.state)

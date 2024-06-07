@@ -12,7 +12,8 @@ from .node import Node
 
 
 class Parser:
-  def __init__(self, tokens=None):
+  def __init__(self, dependency, tokens=None):
+    self.dependency = dependency  # dependency reference for error tracking
     self.state = StateDefault(self) # current state
     self._tokens = tokens or [] # list of tokens fed to the parser
     self._index = 0 # index of the currently parsed token

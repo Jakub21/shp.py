@@ -6,7 +6,7 @@ Individual parsing rules used by parser states.
 """
 
 from ..common.LANG import TOKEN_TYPE
-from ..common.errors import ParserError
+from ..common.errors import ParserAttributeOrderError
 from .node import Node
 
 
@@ -122,9 +122,11 @@ class RuleAttrsKeyValCycle(ParserRule):
   def check_is_val_sign(self, expected):
     match = self.parser.currentToken.data == TOKEN_TYPE.AttrValue
     if match and not expected:
-      raise ParserError(f'Unexpected {TOKEN_TYPE.AttrValue} sign')
+      raise ParserAttributeOrderError(self.parser.dependency, self.parser.currentToken.position,
+                                      f'Unexpected {TOKEN_TYPE.AttrValue} sign')
     if not match and expected:
-      raise ParserError(f'Expected {TOKEN_TYPE.AttrValue} sign')
+      raise ParserAttributeOrderError(self.parser.dependency, self.parser.currentToken.position,
+                                      f'Expected {TOKEN_TYPE.AttrValue} sign')
 
 
 class RuleExitNodeAttrs(ParserRule):

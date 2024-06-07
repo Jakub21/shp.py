@@ -28,9 +28,7 @@ class ParserState:
 
   def parse(self):
     ind = self.parser.selection.depth * 4 * ' '
-    # print(ind, self.parser.selection, '|', self.parser.currentToken, '|', self.__class__.__name__)
     for rule in self.rules:
-      # print('  ', rule)
       if not rule.run():
         return
 

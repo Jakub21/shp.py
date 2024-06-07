@@ -26,19 +26,19 @@ class Composer:
     RuleAppendContent(self)
 
   def compose(self, node=None):
-    self._compose_node(self.tree)
+    for child in self.tree.children:
+      self._compose_node(child)
     self.result += HTML_BUILD.FileSuffix
     return self.result
 
   def _compose_node(self, node):
+    self._run_rules(node, 'open')
     for child in node.children:
-      self._run_rules(child, 'open')
       self._compose_node(child)
-      self._run_rules(child, 'close')
+    self._run_rules(node, 'close')
 
   def _run_rules(self, node, phase):
     self.current = node
     for rule in self.rules:
       portion = getattr(rule, f'run_{phase}')()
-      if portion: print(rule, phase, f'"{portion}"', sep='\t')
       self.result += portion or ''

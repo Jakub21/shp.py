@@ -9,7 +9,7 @@ __all__ = ['Dependency']
 
 from ..lexer import Lexer
 from ..parser import Parser
-from ..common.errors import ShpDependencyError
+from ..common.errors import DependencyNotFoundError
 
 
 class Dependency:
@@ -22,11 +22,11 @@ class Dependency:
     try:
       with open(self.path, 'r') as file:
         content = file.read()
-    except FileNotFoundError as err:
-      raise ShpDependencyError(f'File {self.path} does not exist') from None
-    lexer = Lexer(content)
+    except DependencyNotFoundError as err:
+      raise DependencyNotFoundError(self) from None
+    lexer = Lexer(self, content)
     lexer.tokenize()
-    parser = Parser(lexer.tokens)
+    parser = Parser(self, lexer.tokens)
     parser.parse()
     self.tree = parser.tree
 

@@ -56,6 +56,8 @@ class RuleNewlineTail(LexerRule):
 class RuleWhitespaceTail(LexerRule):
   def run(self):
     if self.lexer.matchAny(WHITESPACE):
+      if not self.lexer.tokens:
+        return False
       token = self.lexer.currentToken
       if token.isNull():
         token = self.lexer.tokens[-1]
@@ -80,12 +82,11 @@ class RuleCommentChar(LexerRule):
     return True
 
 
-class RulePreviousAtNewline(LexerRule):
+class RuleEndCommentAtNewline(LexerRule):
   def run(self):
     if self.lexer.match('\n'):
       self.lexer.previousState()
-      return False
-    return True
+    return False
 
 
 class RuleEscapeChar(LexerRule):

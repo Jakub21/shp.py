@@ -31,15 +31,10 @@ class LexerState:
 
   def tokenize(self):
     self.ensureValidToken()
-    # print(self, f'"{self.lexer.currentChar}"')
     for rule in self.rules:
-      # print('  ', rule, self.lexer.currentToken)
       if not rule.run():
-        # print('[break]')
         return
     self._default.run()
-    # print('  ', self._default, self.lexer.currentToken)
-    # print('[done]')
 
 
 class StateDefault(LexerState):
@@ -57,8 +52,7 @@ class StateDefault(LexerState):
 class StateComment(LexerState):
   def __init__(self, lexer, current=None):
     super().__init__(lexer, current)
-    RuleNewlineTail(self)
-    RulePreviousAtNewline(self)
+    RuleEndCommentAtNewline(self)
     self._default = RuleIgnore(self)
 
 

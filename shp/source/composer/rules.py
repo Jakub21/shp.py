@@ -46,8 +46,12 @@ class RuleAttributes(ComposerRule):
     if self.composer.current.type_ != 'Tag':
       return
     attributes = ''
+    literal = HTML_BUILD.TagAttributeValueLiteral
     for key, values in self.composer.current.attributes.items():
       value = HTML_BUILD.TagAttributeValueSep.join(values)
+      while literal in value:
+        value = value.replace(literal, '')
+      value = f'{literal}{value}{literal}'
       attributes += HTML_BUILD.TagAttribute.format(key=key, value=value)
     end = HTML_BUILD.TagNameOpenEndVoid if self.composer.current.tag in HTML.Void else HTML_BUILD.TagNameOpenEndScoped
     return attributes + end
@@ -62,7 +66,7 @@ class RuleAppendContent(ComposerRule):
     if not content:
       return
     indent = HTML_BUILD.Indent * self.composer.current.depth
-    return f'\n{indent}{HTML_BUILD.Content.format(content=content)}'
+    return HTML_BUILD.Content.format(indent=indent, content=content)
 
   def run_close(self):
     return

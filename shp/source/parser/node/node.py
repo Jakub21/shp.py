@@ -67,6 +67,9 @@ class Node:
     for child in self.children:
       child.set_depth(depth+1)
 
+  def detach(self):
+    self.parent.children.remove(self)
+
   @classmethod
   def Root(cls):
     """Creates tree-root node"""
