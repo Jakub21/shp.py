@@ -6,7 +6,7 @@ __main__ exposes the CLI.
 $ python -m shp [args]
 """
 
-from shp.source.cli import CLIHandler
+from shp.source.main import CLIHandler
 
 if __name__ == '__main__':
   CLIHandler()
