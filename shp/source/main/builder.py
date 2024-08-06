@@ -10,13 +10,18 @@ from ..compiler import Compiler, Dependency
 
 
 class Builder:
+  dependencies: [Dependency]
+
   def __init__(self, source, target):
     self.source = source
     self.target = target
+    self.dependency = Dependency(self.source)
+    self.dependencies = []
 
   def run(self):
-    dep = Dependency(self.source)
-    comp = Compiler(dep)
-    result = comp.compile()
+    print('Run')
+    compiler = Compiler(self.dependency)
+    self.dependencies = compiler.dependencies
+    result = compiler.compile()
     with open(self.target, 'w') as file:
       file.write(result)

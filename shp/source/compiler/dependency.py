@@ -8,13 +8,22 @@ Dependency class stores a file reference and its dependencies.
 __all__ = ['Dependency']
 
 from ..lexer import Lexer
-from ..parser import Parser
+from ..parser import Parser, Node
 from ..common.errors import DependencyNotFoundError
 
 
 class Dependency:
+  tree: Node
+  dependencies: ['Dependency']
+
   def __init__(self, path):
     self.path = path
+    self.reset()
+
+  def __repr__(self):
+    return f'<Dependency "{self.path}">'
+
+  def reset(self):
     self.tree = None
     self.dependencies = []
 

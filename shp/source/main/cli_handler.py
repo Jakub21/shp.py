@@ -25,7 +25,7 @@ class CLIHandler:
     builder.run()
 
   def watch(self, source, target):
-    watcher = Watcher(source, target)
+    watcher = Watcher([(source, target)])
     watcher.run(blocking=True)
 
   @staticmethod
