@@ -19,7 +19,7 @@ class Builder:
     self.dependencies = []
 
   def run(self):
-    print('Run')
+    print('SHP: Building')
     compiler = Compiler(self.dependency)
     self.dependencies = compiler.dependencies
     result = compiler.compile()

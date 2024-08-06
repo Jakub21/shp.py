@@ -11,6 +11,7 @@ from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
 
 from .builder import Builder
+from ..common.errors import ShpError
 
 
 class Watcher:
@@ -40,7 +41,6 @@ class Watcher:
 
 
 class Runner(Thread):
-  observer: Observer
 
   def __init__(self, source, target):
     super().__init__(target=self.run)
@@ -50,18 +50,25 @@ class Runner(Thread):
     self.stopped = False
     self.needs_refresh = False
     self.dependencies = []
+    self.observers = []
 
   def run(self):
-    self.builder.run()
+    try:
+      self.builder.run()
+    except ShpError as e:
+      self.print_shp_err(e)
     self.dependencies = self.builder.dependencies
     self.start_observer()
     self.block()
 
   def start_observer(self):
-    handler = EventHandler(self)
-    self.observer = Observer()
-    self.observer.schedule(handler, str(self.source.parent), recursive=True)
-    self.observer.start()
+    self.observers = []
+    for path in [self.source, *[dep.path for dep in self.dependencies]]:
+      handler = EventHandler(self, path)
+      observer = Observer()
+      observer.schedule(handler, str(path.parent), recursive=True)
+      observer.start()
+      self.observers += [observer]
 
   def block(self):
     try:
@@ -73,29 +80,35 @@ class Runner(Thread):
       self.stop()
 
   def stop(self):
-    self.observer.stop()
-    self.observer.join()
+    for observer in self.observers:
+      observer.stop()
+      observer.join()
     self.stopped = True
 
   def refresh(self):
     self.needs_refresh = False
-    self.observer.stop()
-    self.observer.join()
+    for observer in self.observers:
+      observer.stop()
+      observer.join()
     self.start_observer()
 
   def build(self):
-    self.builder.run()
-
+    try:
+      self.builder.run()
+    except ShpError as e:
+      self.print_shp_err(e)
     if self.dependencies != self.builder.dependencies:
       self.needs_refresh = True
 
+  def print_shp_err(self, error):
+    print(f'SHP: {error.__class__.__name__}: {error}', end='\n\n')
+
 
 class EventHandler(PatternMatchingEventHandler):
-  def __init__(self, runner):
-    patterns = [str(runner.source), *[str(dep.path) for dep in runner.dependencies]]
-    print('patterns', patterns)
-    super().__init__(patterns=patterns)
+  def __init__(self, runner, path):
     self.runner = runner
+    patterns = [str(path)]
+    super().__init__(patterns=patterns)
 
   def on_modified(self, event):
     self.runner.build()
