@@ -1,0 +1,28 @@
+@doctype
+$html {
+  $head {
+    $meta[charset="utf-8"]
+    $title {Hello world}
+  }
+  $body {
+    @include[file="sample1"]
+    $div[#Main] {
+      $h1[.Title] {Hello}
+      $p {
+        This is sample text // and this is a comment
+      }
+      $img[src = "path"]
+      esc\$dollar
+      esc\@at
+      esc\#comment
+      esc \$ dollar
+      esc \@ at
+      esc \# comment
+      "lit \" qout"
+      $p[+yess !nooo] {
+        Tag in between the content
+      }
+      stuff
+    }
+  }
+}

@@ -1,5 +1,11 @@
+venv
 build
 data
 dist
 shp.egg-info
 __pycache__
+.idea
+samples
+example
+*.shp
+*.html

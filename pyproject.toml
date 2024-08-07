@@ -1,0 +1,23 @@
+[project]
+name = "SHP"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+# preview = true
+select = [
+    "F", "E", "W", "I", "UP", "RUF", "N", "ERA",
+    # "CPY",  # Only works if preview is enabled but doing so also adds many more rules
+    "ANN",  # Enable when the code is more stable
+]
+ignore = [
+    "F405", "F403",  # star imports
+    "N802",  # uppercase methods are used as alternative constructors
+    "ANN101",  # Missing type annotation for `self` in method
+]
+
+[tool.ruff.lint.flake8-copyright]
+# config for the CPY ruleset
+author = "Jakub21"
+notice-rgx = "Static HTML Preprocessor\n"
