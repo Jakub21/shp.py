@@ -8,36 +8,36 @@ Combines all transpiling steps into the full process.
 entry_point must be an instance of Dependency
 """
 
-__all__ = ['Compiler']
+__all__ = ["Compiler"]
 
-from .traverser import Traverser
 from ..composer import Composer
 from ..executor import Executor
+from .traverser import Traverser
 
 
 class Compiler:
-  def __init__(self, entry_point):
-    self.entry_point = entry_point
-    self.dependencies = []
-    self.executor = Executor()
+    def __init__(self, entry_point):
+        self.entry_point = entry_point
+        self.dependencies = []
+        self.executor = Executor()
 
-  def compile(self):
-    self.entry_point.reset()
-    self._compile_dependency(self.entry_point)
-    self.executor.launch_stage('define')
-    self.executor.launch_stage('finalize')
-    composer = Composer(self.entry_point.tree)
-    return composer.compose()
+    def compile(self):
+        self.entry_point.reset()
+        self._compile_dependency(self.entry_point)
+        self.executor.launch_stage("define")
+        self.executor.launch_stage("finalize")
+        composer = Composer(self.entry_point.tree)
+        return composer.compose()
 
-  def _compile_dependency(self, start):
-    start.parse()
-    self.traverse(start)
-    for dependency in start.dependencies:
-      self.dependencies += [dependency]
-      self._compile_dependency(dependency)
-    self.executor.launch_stage('extend')
+    def _compile_dependency(self, start):
+        start.parse()
+        self.traverse(start)
+        for dependency in start.dependencies:
+            self.dependencies += [dependency]
+            self._compile_dependency(dependency)
+        self.executor.launch_stage("extend")
 
-  def traverse(self, start):
-    func_nodes = Traverser(start.tree).find_all(lambda node: node.type_ == 'Func')
-    self.executor.add_nodes(start, func_nodes)
-    self.executor.launch_stage('traverse')
+    def traverse(self, start):
+        func_nodes = Traverser(start.tree).find_all(lambda node: node.type_ == "Func")
+        self.executor.add_nodes(start, func_nodes)
+        self.executor.launch_stage("traverse")

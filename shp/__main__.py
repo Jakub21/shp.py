@@ -8,5 +8,5 @@ $ python -m shp [args]
 
 from shp.source.main import CLIHandler
 
-if __name__ == '__main__':
-  CLIHandler()
+if __name__ == "__main__":
+    CLIHandler()

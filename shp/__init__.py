@@ -5,7 +5,7 @@ Jakub21, 2022 Q4
 __init__
 """
 
-__all__ = ['Compiler', 'Dependency', 'Lexer', 'Parser', 'ROOT']
+__all__ = ["Compiler", "Dependency", "Lexer", "Parser", "ROOT"]
 
 from pathlib import Path
 
