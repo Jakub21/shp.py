@@ -35,7 +35,6 @@ LANG = Namespace.Kwargs(
     PATH=Namespace.Kwargs(
         ParentDir="<",
         Separator=".",
-        # FromEntry = '$/',
     ),
     Variable="?",
     Literal='"',
@@ -43,9 +42,8 @@ LANG = Namespace.Kwargs(
     Comment="//",
 )
 
-
+# map characters to token types
 TOKEN_TYPE = Namespace.Kwargs(
-    # Type = Prefix
     Tag=LANG.TAG.Normal,
     TagPre=LANG.TAG.Preform,
     TagFunc=LANG.TAG.Function,
@@ -62,9 +60,7 @@ TOKEN_TYPE = Namespace.Kwargs(
     Variable=LANG.Variable,
 )
 
-
 WHITESPACE = [" ", "\r", "\n", "\t"]
-
 
 HTML = Namespace.Kwargs(
     DoctypeDefault="HTML",
@@ -87,23 +83,23 @@ HTML = Namespace.Kwargs(
     Preform=["pre"],
 )
 
+# not used for now
+HTML_BUILD_NOT_MINIFIED = Namespace.Kwargs(
+    Indent=' ' * 2,
+    DoctypeClause='<!DOCTYPE {doctype}>',
+    TagNameOpenStart='\n{indent}<{tag}',
+    TagNameOpenEndScoped='>',
+    TagNameOpenEndVoid='/>',
+    TagNameClose='\n{indent}</{tag}>',
+    TagAttribute=' {key}={value}',
+    TagAttributeValueSep=' ',
+    TagAttributeValueLiteral='"',
+    Content='\n{indent}{content}',
+    FilePrefix='<!-- Generated with SHP v2 -->\n',
+    FileSuffix='\n'
+)
 
-# HTML_BUILD = Namespace.Kwargs(
-#   Indent = ' ' * 2,
-#   DoctypeClause = '<!DOCTYPE {doctype}>',
-#   TagNameOpenStart = '\n{indent}<{tag}',
-#   TagNameOpenEndScoped = '>',
-#   TagNameOpenEndVoid = '/>',
-#   TagNameClose = '\n{indent}</{tag}>',
-#   TagAttribute = ' {key}={value}',
-#   TagAttributeValueSep = ' ',
-#   TagAttributeValueLiteral = '"',
-#   Content = '\n{indent}{content}',
-#   FilePrefix = '<!-- Generated with SHP v2 -->\n',
-#   FileSuffix = '\n'
-# )
-
-
+# minified build ruleset, currently in use
 HTML_BUILD = Namespace.Kwargs(
     Indent=" ",
     DoctypeClause="<!DOCTYPE {doctype}>",
@@ -118,7 +114,6 @@ HTML_BUILD = Namespace.Kwargs(
     FilePrefix="<!-- Generated with SHP v2 -->\n",
     FileSuffix="\n",
 )
-
 
 # TODO
 # Token with any escaped character is always set to Text type, this could be problematic in the future

@@ -57,10 +57,3 @@ class StateTagAttrs(ParserState):
 
     def next_phase(self):
         self.phase = (self.phase + 1) % 3
-
-
-# class StatePreformatted(ParserState):
-#   def __init__(self, parser):
-#     super().__init__(parser)
-#     RuleExitPreformatted(self)
-#     RuleAppendContent(self)

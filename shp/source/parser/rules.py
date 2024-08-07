@@ -148,8 +148,3 @@ class RuleExitNodeAttrs(ParserRule):
         self.parser.change_state("StateDefault")
         self.parser.select(self.parser.selection.parent)
         return False
-
-
-# class RuleExitPreformatted(ParserRule):
-#   def run(self):
-#     return True
