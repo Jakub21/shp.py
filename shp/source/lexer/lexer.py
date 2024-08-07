@@ -20,7 +20,7 @@ class Lexer:
         self.data = data  # data fed to the lexer
         self.tokens = []  # list of tokens
         self.position = Position(0, 0)  # pointer to the current position
-        self.currentToken = Token()  # currently edited token
+        self.current_token = Token()  # currently edited token
 
     def tokenize(self):
         for char in self.data:
@@ -40,9 +40,9 @@ class Lexer:
         self.state = self.state.spawnedFrom
 
     def next_token(self, data=""):
-        if not self.currentToken.is_null():
-            self.tokens.append(self.currentToken)
-        self.currentToken = Token(data, self.position.copy())
+        if not self.current_token.is_null():
+            self.tokens.append(self.current_token)
+        self.current_token = Token(data, self.position.copy())
 
     def match(self, what):
         index = self.position.index

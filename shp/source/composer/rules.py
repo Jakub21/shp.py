@@ -5,7 +5,7 @@ Jakub21, 2023 Q2
 Composition rules for the Composer class
 """
 
-from ..common import HTML, HTML_BUILD
+from ..common.lang_data import HTML, HTML_BUILD
 
 
 class ComposerRule:

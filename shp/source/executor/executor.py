@@ -7,7 +7,7 @@ Executor class handles all function calls in the dependency tree.
 
 from namespace import Namespace
 
-from ..common import UnknownFunctionError
+from ..common.errors import UnknownFunctionError
 from .functions import store
 
 
