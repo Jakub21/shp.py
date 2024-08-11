@@ -16,9 +16,7 @@ class Include(LangFunction):
 
     def at_traverse(self):
         path = self.node.attributes.file[-1]
-        self.target = self.dependency.add_dependency_path(
-            resolve_path(self.dependency, path)
-        )
+        self.target = self.dependency.add_dependency_path(resolve_path(self.dependency, path))
 
     def at_extend(self):
         self.node.replace_with(*self.target.tree.children)

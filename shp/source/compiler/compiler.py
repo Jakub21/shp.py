@@ -24,8 +24,8 @@ class Compiler:
     def compile(self):
         self.entry_point.reset()
         self._compile_dependency(self.entry_point)
-        self.executor.launch_stage("define")
-        self.executor.launch_stage("finalize")
+        for stage in ["extend", "define", "finalize"]:
+            self.executor.launch_stage(stage)
         composer = Composer(self.entry_point.tree)
         return composer.compose()
 
@@ -35,7 +35,6 @@ class Compiler:
         for dependency in start.dependencies:
             self.dependencies += [dependency]
             self._compile_dependency(dependency)
-        self.executor.launch_stage("extend")
 
     def traverse(self, start):
         func_nodes = Traverser(start.tree).find_all(lambda node: node.type_ == "Func")
