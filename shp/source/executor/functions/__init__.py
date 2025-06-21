@@ -3,25 +3,26 @@ Static HTML Preprocessor
 Jakub21, 2023 Q2
 --------------------------------
 __init__
-This is adapted from a very old aggregate.
-The only viable alternative was manually maintained list, so it had to be used.
-There were available some advanced loaders but all of them break relative imports.
+Automated file aggregator.
+Imports a specific class from all files in the current directory.
+Imported class must have the same name as the file but in title case.
 """
 
 __all__ = ["store"]
 
+from importlib import import_module
 from pathlib import Path
 
 from namespace import Namespace
 
 
-def __find():
+def __find(package):
     for file in Path(__file__).parent.glob("*.py"):
         if file.stem.startswith("__"):
             continue
-        exec(f"from .{file.stem} import {file.stem.title()}")
-        store[file.stem] = eval(file.stem.title(), globals(), locals())
+        module = import_module(f'.{file.stem}', package=package)
+        store[file.stem] = getattr(module, file.stem.title())
 
 
 store = Namespace({})
-__find()
+__find('shp.source.executor.functions')
